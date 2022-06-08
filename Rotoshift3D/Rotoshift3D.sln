@@ -1,11 +1,7 @@
+﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2008
-
-Project("{BDCF85A8-76F8-B007-9432-C4B18100CF10}") = "Rotoshift3D", "Assembly-CSharp-firstpass.csproj", "{80C7EE64-9991-8B22-B962-5B9DD0A7200E}"
-EndProject
-Project("{BDCF85A8-76F8-B007-9432-C4B18100CF10}") = "Rotoshift3D", "Assembly-UnityScript-firstpass.unityproj", "{78490049-DB00-84C4-0D53-CFF91057650F}"
-EndProject
-Project("{BDCF85A8-76F8-B007-9432-C4B18100CF10}") = "Rotoshift3D", "Assembly-UnityScript.unityproj", "{FFCBE03F-87B9-409C-7DCA-CEA9A97376C2}"
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rotoshift3D", "Assembly-CSharp-firstpass.csproj", "{80C7EE64-9991-8B22-B962-5B9DD0A7200E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,14 +13,6 @@ Global
 		{80C7EE64-9991-8B22-B962-5B9DD0A7200E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80C7EE64-9991-8B22-B962-5B9DD0A7200E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80C7EE64-9991-8B22-B962-5B9DD0A7200E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{78490049-DB00-84C4-0D53-CFF91057650F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{78490049-DB00-84C4-0D53-CFF91057650F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{78490049-DB00-84C4-0D53-CFF91057650F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{78490049-DB00-84C4-0D53-CFF91057650F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FFCBE03F-87B9-409C-7DCA-CEA9A97376C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FFCBE03F-87B9-409C-7DCA-CEA9A97376C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FFCBE03F-87B9-409C-7DCA-CEA9A97376C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FFCBE03F-87B9-409C-7DCA-CEA9A97376C2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -47,5 +35,4 @@ Global
 		$3.inheritsScope = text/plain
 		$3.scope = text/plain
 	EndGlobalSection
-
 EndGlobal
