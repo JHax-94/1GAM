@@ -1,0 +1,8 @@
+Thanks for downloading Gentlemen!
+
+Apologies for the hastily thrown together standalone version, this game was designed to be run using Unity Web Player but as 
+Google Chrome no longer supports it I felt I should offer an alternative.
+
+Thank you for checking out my game, feel free to get in touch on Twitter @Hacksaw79 or email jhaxgame@gmail.com
+
+(c) Josh Haxell 2015
