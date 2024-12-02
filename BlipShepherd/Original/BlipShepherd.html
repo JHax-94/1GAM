@@ -1,0 +1,2005 @@
+<canvas id = "ctx" width = "720" height = "510" style = "border:3px solid #000000;"></canvas>
+
+<script type = "text/javascript">
+var ctx = document.getElementById("ctx").getContext("2d");
+document.getElementById("ctx").setAttribute("tabindex", 0);
+// - - - CLICK HANDLER - - -
+
+function getMousePos(ctx, evt)
+{
+ var rect = document.getElementById("ctx").getBoundingClientRect();
+ 
+ return{ x: evt.clientX-rect.left, y: evt.clientY - rect.top };
+
+}
+
+var keyPressBusy = false;
+
+document.getElementById("ctx").addEventListener("keydown", function(e)
+{ 
+ if(keyPressBusy == false && gameOn == true)
+ {
+  keyPressBusy = true;
+  
+  if(Go == true)
+  {
+   if(e.keyCode == 87)
+   {
+    // UP
+    if(playerPos[1] != 0 && gameBoard.tiles[playerPos[0]][playerPos[1]-1].getType() >= 0)
+    {
+     gameBoard.moveFrom();
+     playerPos[1] --;
+    }
+    
+   }
+   else if(e.keyCode == 65)
+   {
+    // LEFT
+    if(playerPos[0] != 0 && gameBoard.tiles[playerPos[0]-1][playerPos[1]].getType() >= 0)
+    {
+     gameBoard.moveFrom();
+    
+     playerPos[0] --;
+    }
+   }
+   else if(e.keyCode == 83 )
+   {
+    // DOWN
+   
+    if(playerPos[1] < 29 && gameBoard.tiles[playerPos[0]][playerPos[1]+1].getType() >= 0)
+    { 
+     gameBoard.moveFrom();
+     playerPos[1] ++;
+    }
+   
+   }
+   else if(e.keyCode == 68)
+   {
+    // RIGHT
+    if(playerPos[0] < 47 && gameBoard.tiles[playerPos[0]+1][playerPos[1]].getType() >= 0)
+    {
+     gameBoard.moveFrom();
+     playerPos[0] ++;
+    }
+   }
+   /*else if(e.keyCode == 80)
+   {
+    clearInterval(LoopRun);
+    Go = false;
+    Menu();
+   }
+   */
+  }
+  
+  if(e.keyCode == 80)
+  {
+   if(Go == true)
+   {
+    clearInterval(LoopRun);
+    Go = false;
+    Menu();
+   }
+   else
+   {
+    LoopRun = setInterval(gameLoop, 250);
+    Go = true;
+    Menu();
+   }
+  }
+  
+  gameBoard.moveTo();
+  gameBoard.draw();
+ }
+}, false);
+
+document.getElementById("ctx").addEventListener("keyup", function(e) 
+{
+ keyPressBusy = false;
+ 
+ 
+}, false);
+
+function Bounded(IN, lower, upper)
+{
+ var rVal = false;
+
+ if(IN > lower && IN < upper)
+ {
+  rVal = true;
+ }
+ 
+ return rVal;
+ 
+}
+
+
+
+document.getElementById("ctx").addEventListener('click', function(evt)
+{ 
+ var mousePos = getMousePos(ctx, evt);
+ 
+ if(TitleScreen == true)
+ {
+  if(Bounded(mousePos.x, 120, 240) == true && Bounded(mousePos.y, 300, 330) == true)
+  {
+   TitleScreen = false;
+   level = 0;
+   //alert("Level Select");
+   levelSelect();
+  }
+  else if(Bounded(mousePos.x,  480, 600) == true && Bounded(mousePos.y, 300, 330) == true)
+  {
+   TitleScreen = false;
+   pageNo = 0;
+   Instructions();
+   
+  }
+ }
+ else if(LevelSel == true)
+ {
+  if(Bounded(mousePos.x, 240, 480) == true && mousePos.y > 450)
+  {
+   LevelSel = false;
+   level = 0;
+   titleScreen();
+  }
+  
+  else
+  {
+   for(var row = 0; row < 3; row ++)
+   {
+    for(var col = 0; col < 3; col ++)
+    {
+     if(Bounded(mousePos.x, 130+2*90*col, 220+2*90*col) == true && Bounded(mousePos.y, 80+2*60*row, 140+2*60*row))
+     {
+      level = 1+3*row+col;
+      LevelSel = false;
+      gameOn = true;
+      Go = true;
+      playLevel();
+     }
+    }
+   }
+  }
+  
+  
+ }
+ else if(instructOn == true)
+ {
+  if(Bounded(mousePos.x, 240, 480) == true && mousePos.y > 450)
+  {
+   instructOn = false;
+   titleScreen();
+  }
+  else if(Bounded(mousePos.x, 480, 720) == true && mousePos.y > 450)
+  { 
+   if(pageNo != 1)
+   {
+    pageNo ++;
+    Instructions();
+   }
+  }
+  else if(Bounded(mousePos.x, 0, 240) == true && mousePos.y > 450)
+  {
+   if(pageNo != 0)
+   {
+    pageNo --;
+    Instructions();
+   }
+  }
+  
+  
+ }
+ else if(gameOn == true)
+ {
+  if(mousePos.y > 450)
+  {
+   if(Go == true)
+   {
+    if(Bounded(mousePos.x, 480, 600) == true)
+    {
+     // Reset Button
+     
+     clearInterval(LoopRun);
+     
+     gameBoard.clear();
+     playLevel();
+     
+    }
+    else if(Bounded(mousePos.x, 600, 720) == true)
+    {
+     // LEVEL SELECT BUTTON
+     
+     gameOn = false;
+     Go = false;
+     clearInterval(LoopRun);
+     
+     gameBoard.clear();
+     levelSelect();
+     
+     
+    }
+    
+    if(finishOn == true && Bounded(mousePos.x, 360, 480) == true)
+    { 
+     // FINISH BUTTON
+     if(trophies[level-1] == 'b')
+     {
+      if(trophy == 's' || trophy == 'g')
+      {
+       trophies[level-1] = trophy;
+      }
+     }
+     else if(trophies[level-1] == 's')
+     {
+      if(trophy == 'g')
+      {
+       trophies[level-1] = trophy;
+      }
+     }
+     else if(trophies[level-1] == 'n')     
+     {
+      trophies[level-1] = trophy;
+     }
+     
+     localStorage.setItem("trophies", JSON.stringify(trophies));
+     
+     gameOn = false;
+     Go = false;
+     VictoryOn = true;
+    }
+   }
+  }
+ }
+ else if(VictoryOn == true)
+ {
+  VictoryOn = false;
+  clearScreen();
+  levelSelect();
+ }
+  
+ 
+}, false);
+
+// - - - CLICK HANDLER *END* - - -
+
+// - - - TILE CLASS - - -
+
+function tile(col, row)
+{
+ this.col = col;
+ this.row = row;
+ this.type = 0;
+ this.colour = "white";
+ this.x_vel = 0;
+ this.y_vel = 0;
+ this.moved = false;
+ this.count = 0;
+ 
+}
+
+tile.prototype.addLife = function()
+{
+ this.type = 1;
+ this.colour = "yellow";
+}
+
+tile.prototype.addPlayer = function()
+{
+ this.type = 2;
+ this.colour = "green";
+}
+
+tile.prototype.addWall = function()
+{
+ this.type = -1;
+ this.colour = "black";
+}
+
+tile.prototype.addPool = function()
+{
+ this.type = -2;
+ this.colour = "blue";
+ 
+}
+
+tile.prototype.addTurret = function()
+{
+ this.type = -3;
+ this.colour = "brown";
+ this.count = 30;
+}
+
+tile.prototype.addBioTurret = function()
+{
+ this.type = -5;
+ this.colour = "mediumvioletred";
+ this.count = 30;
+}
+
+tile.prototype.addBullet = function(dir, vel, moved)
+{
+ if(this.getType() != -1 && this.getType() != 2)
+ {
+  if(typeof(dir)==='undefined') dir = 'none';
+  if(typeof(vel)==='undefined') vel = 0;
+  if(typeof(moved)==='undefined') moved = false;
+  
+  this.type = -4;
+  this.colour = "red";
+  /*if(this.x_vel > 0)
+  { 
+   this.moved = moved;
+  }
+  if(this.y_vel > 0)
+  {
+   this.moved = moved;
+  }*/
+  this.moved = moved;
+  
+  if(vel <= 0)
+  {
+   this.moved = false;
+  }
+  
+  if(dir == 'x')
+  {
+   this.x_vel = vel;
+  }
+  else if(dir == 'y')
+  {
+   this.y_vel = vel;
+  } 
+ }
+}
+
+tile.prototype.addBio = function(dir, vel, moved)
+{
+ if(this.getType() != -1 && this.getType() != 2)
+ {
+  if(typeof(dir)==='undefined') dir = 'none';
+  if(typeof(vel)==='undefined') vel = 0;
+  if(typeof(moved)==='undefined') moved = false;
+  
+  this.type = 3;
+  this.colour = "purple";
+  this.moved = moved;
+  
+  if(vel <= 0)
+  {
+   this.moved = false
+  }
+  
+  if(dir == 'x')
+  {
+   this.x_vel = vel;
+  }
+  else if(dir == 'y')
+  {
+   this.y_vel = vel;
+  }
+ }
+}
+
+tile.prototype.hasDir = function()
+{
+ var rVal = true;
+ 
+ if(this.dir == 'none')
+ {
+  rVal = false;
+ }
+ 
+ return rVal;
+}
+
+
+tile.prototype.bulletMoved = function()
+{
+ var rVal = this.moved;
+ 
+ if(this.moved == true)
+ {
+  this.moved = false;
+ }
+ 
+ return rVal;
+ 
+}
+
+tile.prototype.fireBullet = function(dir, vel)
+{
+ if(this.getType() == -4 || this.getType() == 3)
+ {
+  if(dir == 'x')
+  {
+   this.x_vel = vel;
+  }
+  else if(dir == 'y')
+  {
+   this.y_vel = vel;
+  }
+ }
+}
+
+tile.prototype.kill = function()
+{
+ this.type = 0;
+ this.colour = "white";
+ this.x_vel = 0;
+ this.y_vel = 0;
+}
+
+tile.prototype.alive = function()
+{
+ var living;
+ 
+ if(this.type > 0)
+ {
+  living = true;
+ }
+ else
+ {
+  living = false;
+ }
+ 
+ return living;
+}
+
+tile.prototype.getType = function()
+{
+ return this.type;
+}
+
+tile.prototype.getCount = function()
+{
+ return this.count;
+}
+
+tile.prototype.doCount = function()
+{
+ if(this.count == 0)
+ {
+  this.count = 40;
+ }
+ else
+ {
+  this.count = this.count - 1;
+ }
+ 
+ 
+}
+
+tile.prototype.draw = function()
+{
+
+ ctx.beginPath();
+ ctx.lineWidth = "0.75";
+ ctx.strokeStyle = "black";
+ ctx.rect(15*this.col, 15*this.row, 15, 15);
+ ctx.fillStyle = this.colour;
+ ctx.fillRect(15*this.col, 15*this.row, 15, 15);
+ ctx.stroke();
+}
+
+tile.prototype.flip = function()
+{
+ if(this.col != playerPos[0] || this.row != playerPos[1])
+ {
+  if(this.getType() == 1)
+  {
+   this.type = 0;
+   this.colour = "white";
+  }
+  else if(this.getType() == 0)
+  {
+   this.type = 1;
+   this.colour = "yellow";
+  }
+ }
+}
+
+
+ 
+// - - - TILE CLASS *END* - - -
+
+// - - - GRID CLASS - - -
+
+//grid constructor 
+
+function grid(n_cols, n_rows)
+{
+ this.tiles = new Array(n_cols);
+ this.flip = new Array(n_cols);
+ for(var i = 0; i < n_cols; i++)
+ {
+  this.tiles[i] = new Array(n_rows);
+  this.flip[i] = new Array(n_rows);
+ }
+ this.n_cols = n_cols;
+ this.n_rows = n_rows;
+ 
+ for(var i = 0; i < n_cols; i ++)
+ {
+  for(var j = 0; j < n_rows; j ++)
+  {
+   sq = new tile(i, j);
+   
+   this.tiles[i][j] = sq;
+   
+   //this.tiles[i][j].draw();
+  }
+ }
+}
+
+//grid constructor *END*
+
+grid.prototype.addTarget = function(bTarget, sTarget, gTarget)
+{
+ this.bTarget = bTarget;
+ this.sTarget = sTarget;
+ this.gTarget = gTarget;
+}
+
+grid.prototype.getBTarget = function()
+{
+ return this.bTarger;
+}
+
+grid.prototype.getSTarget = function()
+{
+ return this.sTarget;
+}
+
+grid.prototype.getGTarget = function()
+{
+ return this.gTarget;
+}
+
+grid.prototype.clear = function()
+{
+ for(var i = 0; i < this.n_cols; i ++)
+ {
+  for(var j = 0; j < this.n_rows; j ++)
+  {
+   sq = new tile(i, j);
+   this.tiles[i][j] = sq;
+  }
+ 
+ }
+}
+
+grid.prototype.addLife = function(x_pos, y_pos)
+{
+ this.tiles[x_pos][y_pos].addLife();
+}
+
+grid.prototype.addPlayer = function()
+{
+ this.tiles[playerPos[0]][playerPos[1]].addPlayer();
+}
+
+grid.prototype.saveBlips = function(x_pos, y_pos)
+{  
+ 
+
+
+ if(this.tiles[x_pos+1][y_pos].getType() == 1)
+ {
+  safe ++;
+  this.tiles[x_pos+1][y_pos].kill();
+  this.flip[x_pos+1][y_pos] = false;
+  Menu();
+ }
+ if(this.tiles[x_pos-1][y_pos].getType() == 1)
+ {
+  safe ++;
+  this.tiles[x_pos-1][y_pos].kill();
+  this.flip[x_pos-1][y_pos] = false;
+  Menu();
+ }
+ if(this.tiles[x_pos][y_pos+1].getType() == 1)
+ {
+  safe ++;
+  this.tiles[x_pos][y_pos+1].kill();
+  this.flip[x_pos][y_pos+1] = false;
+  Menu();
+ }
+ if(this.tiles[x_pos][y_pos-1].getType() == 1)
+ {
+  safe ++;
+  this.tiles[x_pos][y_pos-1].kill();
+  this.flip[x_pos][y_pos-1] = false;
+  Menu();
+ }
+ 
+ if(safe >= this.bTarget)
+ {
+  finishOn = true;
+ 
+  if(Bounded(safe, this.bTarget-1, this.sTarget) == true)
+  {
+   //VCS
+   // VICTORY CONDITIONS SATISFIED
+   /*gameOn = false;
+   Go = false;
+   VictoryOn = true;
+   Menu();   */
+   if(trophy == 'n')
+   {
+    trophy = 'b';
+   }
+   //LevelSelect();
+  }
+  else if(Bounded(safe, this.sTarget-1, this.gTarget) == true)
+  {
+   if(trophy == 'n' || trophy == 'b')
+   {
+    trophy = 's';
+   }
+  }
+  else if(safe >= this.gTarget)
+  {
+   if(trophy != 'g')
+   {
+    trophy = 'g';
+   }
+  }
+  Menu();
+ }
+ 
+ 
+}
+
+grid.prototype.countNeighbours = function(x_pos, y_pos)
+{
+ var count = 0;
+ 
+ for(var i = -1; i < 2; i ++)
+ {
+  for(var j = -1; j < 2; j ++)
+  {
+   if((i != 0 || j != 0) && (x_pos+i > -1 && x_pos+i < this.n_cols) && (y_pos+j > -1 && y_pos+j < this.n_rows))
+   {
+    if(this.tiles[x_pos+i][y_pos+j].getType() > 0)
+    {
+     count ++;
+    }
+   }
+  }
+ }
+ return count;
+}
+
+grid.prototype.cycle = function(x_pos, y_pos)
+{
+
+ for(var i = 0; i < this.n_cols; i ++)
+ { 
+  for(var j = 0; j < this.n_rows; j ++)
+  {
+   var Neighbours = this.countNeighbours(i, j);
+   
+   if(this.tiles[i][j].alive() == true)
+   {
+   /*
+    if(this.tiles[i][j].getType() == 3)
+    {
+     if(this.tiles[i][j].hasDir() == true && this.tiles[i][j].bulletMoved() == false)
+     {
+      this.moveBullet(i, j);
+     }
+    }
+    else */ if(this.tiles[i][j].getType() != 3)
+    {
+     if(Neighbours == 2 || Neighbours == 3)
+     {
+      this.flip[i][j] = false;
+     }
+     else 
+     {
+      this.flip[i][j] = true;
+     }
+    }
+   
+
+    
+   }
+   else if(this.tiles[i][j].alive() == false)
+   {
+   
+   
+    if(Neighbours == 3)
+    {
+     this.flip[i][j] = true;
+    }
+    else
+    {
+     this.flip[i][j] = false;
+    }
+   /* 
+    if(this.tiles[i][j].getType() == -2)
+    {
+     this.saveBlips(i, j);
+    }
+       
+    if(this.tiles[i][j].getType() == -3 || this.tiles[i][j].getType() == -5)
+    {
+     this.turretAction(i, j);
+    }
+    
+    if(this.tiles[i][j].getType() == -4)
+    {
+     if(this.tiles[i][j].hasDir() == true && this.tiles[i][j].bulletMoved() == false)
+     {
+      this.moveBullet(i, j);
+     }
+    }
+   */
+   }
+  }
+ }
+ 
+ for(var i = 0; i < this.n_cols; i ++)
+ {
+  for(var j = 0; j < this.n_rows; j ++)
+  {
+   var Neighbours = this.countNeighbours(i, j);
+   
+   if(this.tiles[i][j].alive() == true)
+   {
+   
+    if(this.tiles[i][j].getType() == 3)
+    {
+     if(this.tiles[i][j].hasDir() == true && this.tiles[i][j].bulletMoved() == false)
+     {
+      this.moveBullet(i, j);
+     }
+    }
+   // else*/if(this.tiles[i][j].getType() != 3)
+   /* {
+     if(Neighbours == 2 || Neighbours == 3)
+     {
+      this.flip[i][j] = false;
+     }
+     else 
+     {
+      this.flip[i][j] = true;
+     }
+    }
+   */
+
+    
+   }
+   else if(this.tiles[i][j].alive() == false)
+   {
+   
+   /*
+    if(Neighbours == 3)
+    {
+     this.flip[i][j] = true;
+    }
+    else
+    {
+     this.flip[i][j] = false;
+    }
+   */
+    if(this.tiles[i][j].getType() == -2)
+    {
+     this.saveBlips(i, j);
+    }
+    
+    if(this.tiles[i][j].getType() == -3 || this.tiles[i][j].getType() == -5)
+    {
+     this.turretAction(i, j);
+    }
+    
+    if(this.tiles[i][j].getType() == -4)
+    {
+     if(this.tiles[i][j].hasDir() == true && this.tiles[i][j].bulletMoved() == false)
+     {
+      this.moveBullet(i, j);
+     }
+    
+    }
+   
+   }
+  }
+ }
+}
+
+// - - - REGULAR TURRETS - - -
+
+grid.prototype.turretAction = function(x, y)
+{
+ var stage = this.tiles[x][y].getCount();
+ var BioTur = false;
+ 
+ if(this.tiles[x][y].getType() == -5)
+ {
+  BioTur = true;
+ }
+
+ 
+ if(stage == 30) // - - - LOAD TURRET - - -
+ {
+  if(BioTur == false)
+  {
+   this.tiles[x-1][y].addBullet('none', 0);
+  }
+  else
+  {
+   this.tiles[x-1][y].addBio('none', 0);
+  }
+  
+  this.tiles[x-1][y].fireBullet('none', 0);
+  
+  //alert("bullet created at " + (x-1) + ", " + y);
+  
+ }
+ else if(stage == 20)
+ {
+  if(BioTur == false)
+  {
+  
+   this.tiles[x][y-1].addBullet('none', 0);
+  }
+  else
+  {
+   this.tiles[x][y-1].addBio('none', 0);
+  }
+  this.tiles[x][y-1].fireBullet('none', 0);
+  //alert("bullet created at " + x + ", " + (y-1));
+ }
+ else if(stage == 10)
+ {
+  if(BioTur == false)
+  {
+   this.tiles[x+1][y].addBullet('none', 0);
+  }
+  else
+  {
+   this.tiles[x+1][y].addBio('none', 0);
+  }
+  this.tiles[x+1][y].fireBullet('none', 0);
+  
+  //alert("bullet created at " + (x+1) + ", " + y);
+ }
+ else if(stage == 0)
+ {
+  if(BioTur == false)
+  {
+   this.tiles[x][y+1].addBullet('none', 0);
+  }
+  else
+  {
+   this.tiles[x][y+1].addBio('none', 0);
+  }
+  
+  this.tiles[x][y+1].fireBullet('none', 0);
+  //alert("bullet created at " + x + ", " + (y+1));
+ }
+ 
+ else if(stage == 25) // - - - FIRE BULLET - - -
+ {
+  this.tiles[x-1][y].fireBullet('x', -1);
+  //alert("bullet at " + (x-1) + ", " + y + " fired");
+ }
+ else if(stage == 15)
+ {
+  this.tiles[x][y-1].fireBullet('y', -1);
+  //alert("bullet at " + x + ", " + (y-1) + " fired");
+ }
+ else if(stage == 5)
+ {
+  this.tiles[x+1][y].fireBullet('x', 1);
+  //alert("bullet at " + (x+1) + ", " + y + " fired");
+ }
+ else if(stage == 35)
+ {
+  this.tiles[x][y+1].fireBullet('y', 1);
+  //alert("bullet at " + x + ", " + (y+1) + " fired");
+ }
+ 
+ this.tiles[x][y].doCount();  
+}
+
+grid.prototype.moveBullet = function(x_pos, y_pos)
+{
+ var dir = 'none';
+ var mag = 0;
+ var Bio = false
+ 
+ if(this.tiles[x_pos][y_pos].getType() == 3)
+ {
+  Bio = true;
+ }
+ 
+ 
+ dx = this.tiles[x_pos][y_pos].x_vel;
+ dy = this.tiles[x_pos][y_pos].y_vel;
+ 
+ if(dx != 0)
+ {
+  dir = 'x';
+  mag = dx; 
+ }
+ else if(dy != 0)
+ {
+  dir = 'y';
+  mag = dy;
+ }
+ 
+ if(dir != 'none')
+ {
+  this.tiles[x_pos][y_pos].kill();
+ }
+ /*if(x_pos+dx >= 0 && y_pos+dy >= 0)
+ {
+  this.tiles[x_pos+dx][y_pos+dy].addBullet(dir, mag);
+ }*/
+ if(dir == 'x')
+ {
+  if(x_pos+mag >= 0 && x_pos+mag <= 47)
+  {
+   if(this.tiles[x_pos+mag][y_pos].getType() == 0)
+   {
+    if(Bio == false)
+    {
+     this.tiles[x_pos+mag][y_pos].addBullet(dir, mag, true);
+    }
+    else
+    {
+     this.tiles[x_pos+mag][y_pos].addBio(dir, mag, true);
+    }
+   }
+   else if(this.tiles[x_pos+mag][y_pos].getType() == 1)
+   {
+    this.tiles[x_pos+mag][y_pos].kill();
+   }
+  }
+ }
+ else if(dir == 'y')
+ {
+  if(y_pos+mag >= 0 && y_pos+mag <= 29)
+  {
+   if(this.tiles[x_pos][y_pos+mag].getType() == 0)
+   { 
+    if(Bio == false)
+    {
+     this.tiles[x_pos][y_pos+mag].addBullet(dir, mag, true);
+    }
+    else
+    {
+     this.tiles[x_pos][y_pos+mag].addBio(dir, mag, true);
+    }
+   }
+   else if(this.tiles[x_pos][y_pos+mag].getType() == 1)
+   {
+    this.tiles[x_pos][y_pos+mag].kill();
+   }
+  }  
+ }
+}
+
+// - - - REGULAR TURRET * END * - - -
+
+grid.prototype.doFlip = function()
+{
+ for(var i = 0; i < this.n_cols; i ++)
+ {
+  for(var j = 0; j < this.n_rows; j ++)
+  {
+   if(this.flip[i][j] == true)
+   {
+    this.tiles[i][j].flip();
+   }
+  }
+ }
+}
+
+grid.prototype.addWall = function(x_start, y_start, len, dir)
+{
+ if(dir == 'x')
+ {
+  
+  for( var i = 0; i < len; i++)
+  {
+   this.tiles[x_start+i][y_start].addWall();
+  }
+  
+  //alert("horizontal wall");
+ }
+ else if(dir == 'y')
+ {
+  
+  for( var i = 0; i < len; i++)
+  {
+   this.tiles[x_start][y_start+i].addWall();
+  }
+  
+  //alert("vertical wall");
+ }
+ else
+ {
+  alert("wall error");
+ }
+}
+
+grid.prototype.addPool = function(x_pos, y_pos)
+{
+ for(var i = -1; i < 2; i ++)
+ {
+  for(j = -1; j < 2; j ++)
+  {
+   if(i != 0 || j != 0)
+   {
+    this.tiles[x_pos+i][y_pos+j].addPool();
+   }
+  }
+ }
+}
+
+grid.prototype.addTurret = function(x_pos, y_pos)
+{
+ this.tiles[x_pos][y_pos].addTurret();
+}
+
+grid.prototype.addBioTurret = function(x_pos, y_pos)
+{
+ this.tiles[x_pos][y_pos].addBioTurret();
+}
+
+grid.prototype.moveFrom = function()
+{
+ this.tiles[playerPos[0]][playerPos[1]].kill();
+}
+
+grid.prototype.moveTo = function()
+{
+ this.tiles[playerPos[0]][playerPos[1]].addPlayer();
+}
+
+grid.prototype.draw = function()
+{
+ for(var i = 0; i < this.n_cols; i ++)
+ {
+  for(var j = 0; j < this.n_rows; j ++)
+  {
+   this.tiles[i][j].draw();
+  }
+ }
+}
+
+// - - - GRID CLASS *END* - - -
+
+function gameLoop()
+{ 
+ gameBoard.cycle();
+ gameBoard.doFlip();
+ gameBoard.draw(); 
+ 
+ if(VictoryOn == true)
+ {
+  victoryScreen();
+ }
+}
+
+function clearScreen()
+{
+ ctx.fillStyle = "white";
+ ctx.fillRect(0, 0, 720, 510);
+}
+
+function clearMenu()
+{ 
+ ctx.fillStyle= "white";
+ ctx.fillRect(0, 451, 720, 60);
+}
+
+function countPoints()
+{
+ var CountPoints = 0;
+
+ for(var  i = 0; i < 9; i ++)
+ {
+  if(trophies[i] == 'b')
+  {
+   CountPoints += 1;
+  }
+  else if(trophies[i] == 's')
+  {
+   CountPoints += 3;
+  }
+  else if(trophies[i] == 'g')
+  {
+   CountPoints += 5;
+  }
+  
+ }
+ 
+ return CountPoints;
+}
+
+function Menu()
+{
+ 
+ clearMenu();
+ ctx.font = "30px Verdana";
+ ctx.fillStyle = "black";
+ if(Go == false)
+ {
+  ctx.fillText("PAUSED", 300, 492);
+  //ctx.fillText("Back", 620, 490);
+ }
+ else
+ {
+  //ctx.fillText("Stop!", 320, 490);
+  ctx.fillText("Safe: ", 20, 492);
+  ctx.fillText(safe, 105, 492);
+  ctx.fillText("/", 165, 492);
+  if(safe < gameBoard.bTarget)
+  {
+   ctx.fillText(gameBoard.bTarget, 180, 492);
+   
+  }
+  else if(Bounded(safe, gameBoard.bTarget-1, gameBoard.sTarget) == true)
+  {
+   ctx.fillText(gameBoard.sTarget, 180, 492);
+  }
+  else 
+  {
+   ctx.fillText(gameBoard.gTarget, 180, 492);
+  }
+  
+  if(trophy == 'b' || trophy == 's' || trophy == 'g')
+  {
+   lineWidth = "1";
+   ctx.beginPath();
+   ctx.arc(270, 480, 10, 0, 2*Math.PI);
+   ctx.fillStyle = 'brown';
+   ctx.fill();
+   ctx.stroke();
+  }
+  if(trophy == 's' || trophy == 'g')
+  {
+   lineWidth = "1";
+   ctx.beginPath();
+   ctx.arc(300, 480, 10, 0, 2*Math.PI);
+   ctx.fillStyle = "grey";
+   ctx.fill();
+   ctx.stroke();
+  }
+  if(trophy == 'g')
+  {
+   lineWidth = "1";
+   ctx.beginPath();
+   ctx.arc(330, 480, 10, 0, 2*Math.PI);
+   ctx.fillStyle = "yellow";
+   ctx.fill();
+   ctx.stroke();
+  }
+  
+  
+  
+  if(finishOn == true)
+  {
+   ctx.beginPath();
+   ctx.lineWidth = "2";
+   ctx.rect(360, 451, 120, 60);
+   ctx.stroke();
+   ctx.fillStyle = "black";
+   ctx.fillText("Finish!", 371, 492);
+  }
+  
+  ctx.font = "20px Trebuchet MS";
+  ctx.fillStyle = "black";
+  
+  
+  ctx.fillText("Level", 635, 475);
+  ctx.fillText("Select", 633, 500);
+  ctx.fillText("Reset", 515, 490);
+  
+  ctx.beginPath();
+  ctx.lineWidth = "2";
+  ctx.rect(480, 451, 120, 60);
+  ctx.stroke();
+  
+  ctx.beginPath();
+  ctx.lineWidth = "2";
+  ctx.rect(601, 451, 120, 60);
+  ctx.stroke();
+ }
+}
+
+// * * * TITLE * * *
+// * * * ----- * * *
+
+function titleScreen()
+{
+ var loadTrophies = localStorage.getItem("trophies");
+ loadTrophies = JSON.parse(loadTrophies);
+ 
+ 
+ 
+ 
+ for(var i = 0; i < 9; i ++)
+ {
+  trophies[i] = loadTrophies[i];
+ }
+ totalPoints = countPoints();
+ 
+ 
+ TitleScreen = true;
+
+ clearScreen();
+ ctx.font = "30px Trebuchet MS";
+ ctx.fillStyle = "black";
+ ctx.fillText("Blip Shepherd", 265, 225);
+ 
+ ctx.fillStyle = "black";
+ ctx.fillRect(120, 300, 120, 30);
+ ctx.fillRect(480, 300, 120, 30);
+ 
+ ctx.font = "16px Trebuchet MS";
+ ctx.fillText("a game by Josh Haxell", 550, 500);
+ 
+ ctx.fillStyle = "white";
+ ctx.font = "20px Trebuchet MS";
+ ctx.fillText("Start", 155, 322);
+ ctx.fillText("Instructions", 486, 322); 
+ 
+ 
+}
+
+// * * * ----- * * *
+
+
+// * * * LEVEL SELECT * * *
+// * * * ------------ * * *
+/*
+function unlock()
+{
+ if(totalScore >= 0)
+ {
+  locked[0] = false;
+ }
+ if(totalScore >= 1)
+ {
+  locked[1] = false;
+ }
+ if(totalScore >= 2)
+ {
+  locked[2] = false;
+ }
+}
+*/
+function levelSelect()
+{
+ //unlock();
+ totalPoints = countPoints();
+ LevelSel = true;
+ gameBoard.clear();
+ clearScreen();
+ 
+ ctx.font = "30px Trebuchet MS";
+ 
+ for(var row = 0; row < 3; row ++)
+ { 
+  for(var col = 0; col < 3; col ++)
+  {
+   
+   ctx.font = "30px Trebuchet MS";
+   
+   ctx.beginPath();
+   ctx.lineWidth = "3";
+   ctx.strokeStyle = "black";
+   ctx.rect(130+2*90*col, 80+2*60*row, 90, 60);
+   ctx.fillStyle = "white";
+   ctx.fillRect(130+2*90*col, 80+2*60*row, 90, 60);
+   ctx.stroke();
+   
+   ctx.lineWidth = "3";
+   ctx.strokeStyle = "black";
+   ctx.rect(130+2*90*col, 140+2*60*row, 90, 30);
+   ctx.fillStyle = "white";
+   ctx.fillRect(130+2*90*col, 140+2*60*row, 90, 30);
+   ctx.stroke();
+   
+   ctx.fillStyle = "black";
+   ctx.fillText( (1+row*3+col) , 167+2*90*col, 120+2*60*row);
+   
+   
+   if(totalPoints >= unlockThresh[row*3+col])
+   {
+    if(trophies[row*3+col] == 'b' || trophies[row*3+col] == 's' || trophies[row*3+col] == 'g')
+    {
+     ctx.beginPath();
+     ctx.arc(145+2*90*col, 155+2*60*row, 5, 0, 2*Math.PI);
+     ctx.fillStyle = "brown";
+     ctx.stroke();
+     ctx.fill();
+    }
+    if(trophies[row*3+col] == 's' || trophies[row*3+col] == 'g')
+    {
+     ctx.beginPath();
+     ctx.arc(175+2*90*col, 155+2*60*row, 5, 0, 2*Math.PI);
+     ctx.fillStyle = "grey";
+     ctx.stroke();
+     ctx.fill();
+    }
+    if(trophies[row*3+col] == 'g')
+    {
+     ctx.beginPath();
+     ctx.arc(205+2*90*col, 155+2*60*row, 5, 0, 2*Math.PI);
+     ctx.fillStyle = "yellow";
+     ctx.stroke();
+     ctx.fill();
+    }
+   }
+   else
+   {
+    ctx.font = "16px Trebuchet MS";
+    ctx.fillText("Locked!", 147+2*90*col, 135+2*60*row);
+    ctx.fillText(unlockThresh[row*3+col] + " points", 143+2*90*col, 160+2*60*row);
+   }
+  }
+ } 
+ ctx.font = "30px Trebuchet MS";
+ ctx.fillStyle = "black";
+ ctx.fillText("Level Select", 275, 40);
+ ctx.fillText("Main Menu", 285, 490);
+ 
+ for(var i = 0; i < 3; i ++)
+ {
+  ctx.beginPath();
+  ctx.lineWidth = "3";
+  ctx.rect(i*240, 450, 240, 60);
+  ctx.stroke();
+ }
+ 
+ ctx.font = "16px Trebuchet MS";
+ ctx.fillText("Total points: " + totalPoints, 300, 60);
+ 
+}
+
+// * * * --------- * * *
+
+function playLevel()
+{
+ safe = 0;
+ trophy = 'n';
+ finishOn = false;
+
+ switch(level)
+ {
+  case 1:
+  {
+   playerPos[0] = 7;
+   playerPos[1] = 8;
+   gameBoard.addWall(5, 4, 22, 'x');
+   gameBoard.addWall(5, 12, 22, 'x');
+   gameBoard.addWall(26, 5, 7, 'y');
+   gameBoard.addWall(5, 5, 7, 'y');
+   gameBoard.addLife(13, 6);
+   gameBoard.addLife(14, 6);
+   gameBoard.addLife(15, 6);
+   gameBoard.addLife(13, 10);
+   gameBoard.addLife(14, 10);
+   gameBoard.addLife(15, 10);
+   gameBoard.addPool(23, 8);
+   gameBoard.addTarget(25, 50, 100);
+  
+  break;
+  }
+  case 2:
+  {
+   playerPos[0] = 2;
+   playerPos[1] = 4;
+   
+   gameBoard.addWall(0, 10, 42, 'x');
+   gameBoard.addWall(45, 10, 3, 'x');
+   gameBoard.addWall(6, 20, 42, 'x');
+   gameBoard.addWall(0, 2, 5, 'y');
+   gameBoard.addWall(4, 2, 2, 'y');
+   gameBoard.addWall(4, 5, 2, 'y');
+   gameBoard.addWall(5, 3, 6, 'x');
+   gameBoard.addWall(5, 5, 6, 'x');
+   gameBoard.addWall(1, 2, 3, 'x');
+   gameBoard.addWall(1, 6, 3, 'x');
+   gameBoard.addWall(14, 3, 3, 'y');
+   gameBoard.addWall(10, 0, 3, 'y');
+   gameBoard.addWall(10, 6, 3, 'y');
+   gameBoard.addWall(11, 0, 37, 'x');
+   gameBoard.addWall(11, 8, 31, 'x');
+   gameBoard.addWall(45, 8, 3, 'x');
+   gameBoard.addWall(15, 4, 13, 'x');
+   gameBoard.addWall(17, 1, 2, 'y');
+   gameBoard.addWall(19, 2, 2, 'y');
+   gameBoard.addWall(21, 1, 2, 'y');
+   gameBoard.addWall(23, 2, 2, 'y');
+   gameBoard.addWall(25, 1, 2, 'y');
+   gameBoard.addWall(27, 2, 2, 'y');
+   gameBoard.addWall(45, 9, 1, 'y');
+   gameBoard.addWall(41, 9, 1, 'y');
+   gameBoard.addWall(17, 6, 2, 'y');
+   gameBoard.addWall(19, 5, 2, 'y');
+   gameBoard.addWall(21, 6, 2, 'y');
+   gameBoard.addWall(23, 5, 2, 'y');
+   gameBoard.addWall(25, 6, 2, 'y');
+   gameBoard.addWall(27, 5, 2, 'y');
+   gameBoard.addWall(28, 6, 12, 'x');
+   gameBoard.addWall(29, 1, 4, 'y'); 
+   gameBoard.addWall(31, 2, 4, 'y'); 
+   gameBoard.addWall(33, 1, 4, 'y'); 
+   gameBoard.addWall(35, 2, 4, 'y');
+   gameBoard.addWall(37, 1, 4, 'y'); 
+   gameBoard.addWall(39, 2, 4, 'y');
+   gameBoard.addWall(41, 2, 6, 'y');
+   gameBoard.addWall(42, 2, 5, 'x');
+   gameBoard.addWall(46, 3, 4, 'y');
+   gameBoard.addWall(44, 4, 5, 'y');
+   gameBoard.addWall(43, 4, 1, 'x');
+   
+   
+   for(var i = 1; i < 4; i ++)
+   {
+    gameBoard.addLife(12*i, 14);
+    gameBoard.addLife(12*i, 15);
+    gameBoard.addLife(12*i, 16);
+   }
+   
+   gameBoard.addTurret(2, 15);
+   gameBoard.addTurret(12, 22);
+   gameBoard.addTurret(24, 28);
+   gameBoard.addPool(45, 25);
+   gameBoard.addTarget(25, 50, 100);
+   
+   
+  break;
+  }
+  case 3:
+  {
+   playerPos[0] = 2;
+   playerPos[1] = 2;
+   
+   gameBoard.addBioTurret(12, 10);
+   gameBoard.addBioTurret(24, 10);
+   gameBoard.addBioTurret(36, 10);
+   
+   gameBoard.addBioTurret(12, 20);
+   gameBoard.addBioTurret(24, 20);
+   gameBoard.addBioTurret(36, 20);
+   
+   gameBoard.addWall(0, 0, 12, 'x');
+   gameBoard.addWall(1, 9, 4, 'x');
+   gameBoard.addWall(7, 9, 5, 'x'); 
+   gameBoard.addWall(11, 6, 3, 'y');
+   gameBoard.addWall(0, 1, 9, 'y');
+   gameBoard.addWall(11, 1, 3, 'y');
+   
+   gameBoard.addLife(5, 4);
+   gameBoard.addLife(6, 4);
+   gameBoard.addLife(5, 5);
+   gameBoard.addLife(6, 5);
+   
+   gameBoard.addPool(45, 27);
+   
+   gameBoard.addTarget(25, 50, 100);
+   
+  break;
+  }
+  case 4:
+  {
+   gameBoard.addWall(21, 1, 5, 'y');
+   gameBoard.addWall(27, 1, 5, 'y');
+   gameBoard.addWall(21, 0, 7, 'x');
+   gameBoard.addWall(21, 10, 9, 'y');
+   gameBoard.addWall(27, 10, 9, 'y');
+   gameBoard.addWall(21, 23, 5, 'y');
+   gameBoard.addWall(27, 23, 5, 'y');
+   gameBoard.addWall(21, 28, 7, 'x');
+  
+   gameBoard.addWall(14, 10, 7, 'x');
+   gameBoard.addWall(14, 18, 7, 'x');
+   gameBoard.addWall(13, 10, 9, 'y');
+ 
+   gameBoard.addWall(28, 10, 7, 'x');
+   gameBoard.addWall(28, 18, 7, 'x');
+   gameBoard.addWall(35, 10, 9, 'y');
+    
+   gameBoard.addWall(3, 6, 17, 'y');
+   gameBoard.addWall(3, 5, 18, 'x');
+   gameBoard.addWall(3, 23, 18, 'x');
+   
+   gameBoard.addWall(45, 6, 17, 'y');
+   gameBoard.addWall(28, 5, 18, 'x');
+   gameBoard.addWall(28, 23, 18, 'x');
+   
+   gameBoard.addBioTurret(23, 13);
+   gameBoard.addBioTurret(23, 15);
+   gameBoard.addBioTurret(25, 14);
+   
+   gameBoard.addTurret(28, 10);
+   gameBoard.addTurret(30, 10);
+   gameBoard.addTurret(32, 10);
+   gameBoard.addTurret(34, 10);
+   
+   gameBoard.addTurret(29, 5);
+   gameBoard.addTurret(31, 5);
+   gameBoard.addTurret(33, 5);
+   
+   gameBoard.addTurret(28, 18);
+   gameBoard.addTurret(30, 18);
+   gameBoard.addTurret(32, 18);
+   gameBoard.addTurret(34, 18);
+   
+   gameBoard.addTurret(29, 23);
+   gameBoard.addTurret(31, 23);
+   gameBoard.addTurret(33, 23);
+   
+   
+   
+   playerPos[0] = 8;
+   playerPos[1] = 14;
+   
+   gameBoard.addPool(40, 14);
+   gameBoard.addTarget(25, 50, 100);
+   
+  break;
+  }
+  case 5:
+  {
+   gameBoard.addWall(7, 14, 29, 'x');
+   gameBoard.addWall(6, 12, 5, 'y');
+   gameBoard.addWall(7, 12, 10, 'x');
+   gameBoard.addWall(7, 16, 10, 'x'); 
+   
+   gameBoard.addWall(0, 7, 15, 'y');
+   gameBoard.addWall(1, 7, 40, 'x'); 
+   gameBoard.addWall(1, 21, 40, 'x');
+   gameBoard.addWall(40, 8, 5, 'y');
+   gameBoard.addWall(40, 16, 5, 'y');
+   
+   
+   gameBoard.addWall(47, 13, 3, 'y'); 
+   gameBoard.addWall(40, 13, 7, 'x');
+   gameBoard.addWall(40, 15, 7, 'x');
+   
+   gameBoard.addWall(16, 11, 4, 'x');
+   gameBoard.addWall(16, 17, 4, 'x');
+   gameBoard.addWall(19, 12, 8, 'x');
+   gameBoard.addWall(19, 16, 8, 'x');
+   
+   gameBoard.addWall(26, 11, 4, 'x');
+   gameBoard.addWall(26, 17, 4, 'x');
+   gameBoard.addWall(29, 12, 5, 'x');
+   gameBoard.addWall(29, 16, 5, 'x');
+   
+   gameBoard.addLife(17, 12);
+   gameBoard.addLife(18, 12);
+   gameBoard.addLife(17, 13);
+   gameBoard.addLife(18, 13);
+   
+   gameBoard.addLife(17, 15);
+   gameBoard.addLife(17, 16);
+   gameBoard.addLife(18, 15);
+   gameBoard.addLife(18, 16);
+   
+   gameBoard.addLife(27, 12);
+   gameBoard.addLife(27, 13);
+   gameBoard.addLife(28, 12);
+   gameBoard.addLife(28, 13);
+   
+   gameBoard.addLife(27, 15);
+   gameBoard.addLife(27, 16);
+   gameBoard.addLife(28, 15);
+   gameBoard.addLife(28, 16);
+   
+   gameBoard.addBioTurret(7, 13);
+   gameBoard.addBioTurret(7, 15);
+   
+   gameBoard.addPool(3, 14);
+   
+   playerPos[0] = 46;
+   playerPos[1] = 14;
+   
+   gameBoard.addTarget(25, 50, 100);
+   
+  break;
+  }
+  case 6:
+  {
+   gameBoard.addWall(22, 0, 5, 'y');
+   gameBoard.addWall(26, 0, 5, 'y');
+   gameBoard.addWall(23, 0, 3, 'x');
+   gameBoard.addWall(23, 4, 12, 'y');
+   gameBoard.addWall(25, 4, 12, 'y');
+   gameBoard.addWall(23, 17, 13, 'y');
+   gameBoard.addWall(25, 17, 13, 'y');
+   
+   gameBoard.addWall(20, 4, 2, 'x'); 
+   gameBoard.addWall(19, 4, 5, 'y');
+   gameBoard.addWall(20, 8, 1, 'x');
+   gameBoard.addWall(22, 8, 1, 'x');
+   
+   gameBoard.addWall(9, 8, 10, 'x');
+   gameBoard.addWall(9, 24, 14, 'x');
+   gameBoard.addWall(9, 9, 15, 'y');
+   
+   gameBoard.addWall(26, 12, 5, 'x');
+   gameBoard.addWall(30, 13, 7, 'y');
+   gameBoard.addWall(26, 20, 5, 'x');
+   
+   gameBoard.addLife(25, 16);
+   gameBoard.addLife(26, 15);
+   gameBoard.addLife(27, 15);
+   gameBoard.addLife(27, 16);
+   gameBoard.addLife(26, 17);
+   
+   playerPos[0] = 20;
+   playerPos[1] = 16;
+   
+   gameBoard.addBioTurret(24, 2);
+   gameBoard.addBioTurret(21, 6);
+   
+   gameBoard.addTarget(25, 50, 100);
+   gameBoard.addPool(11, 16);
+   
+  break;
+  }
+  case 7:
+  {
+   gameBoard.addLife(1, 5);
+   gameBoard.addLife(2, 5);
+   gameBoard.addLife(1, 6);
+   gameBoard.addLife(2, 6);
+   
+   gameBoard.addLife(11, 5);
+   gameBoard.addLife(11, 6);
+   gameBoard.addLife(11, 7);
+   gameBoard.addLife(12, 4);
+   gameBoard.addLife(12, 8);
+   gameBoard.addLife(13, 3);
+   gameBoard.addLife(13, 9);
+   gameBoard.addLife(14, 3);
+   gameBoard.addLife(14, 9);
+   gameBoard.addLife(15, 6);
+   gameBoard.addLife(16, 4);
+   gameBoard.addLife(16, 8);
+   gameBoard.addLife(17, 5);
+   gameBoard.addLife(17, 6);
+   gameBoard.addLife(17, 7);
+   gameBoard.addLife(18, 6);
+   
+   gameBoard.addLife(21, 3);
+   gameBoard.addLife(21, 4);
+   gameBoard.addLife(21, 5);
+   gameBoard.addLife(22, 3);
+   gameBoard.addLife(22, 4);
+   gameBoard.addLife(22, 5);
+   gameBoard.addLife(23, 2);
+   gameBoard.addLife(23, 6);
+   gameBoard.addLife(25, 1);
+   gameBoard.addLife(25, 2);
+   gameBoard.addLife(25, 6);
+   gameBoard.addLife(25, 7);
+   
+   gameBoard.addLife(35, 3);
+   gameBoard.addLife(35, 4);
+   gameBoard.addLife(36, 3);
+   gameBoard.addLife(36, 4);
+   
+   gameBoard.addBioTurret(7, 22);
+   gameBoard.addTurret(3, 26);
+   gameBoard.addBioTurret(1, 28);
+   
+   gameBoard.addWall(5, 24, 2, 'x'); 
+   gameBoard.addWall(5, 9, 13, 'y');
+   gameBoard.addWall(0, 9, 5, 'x');
+   gameBoard.addWall(42, 24, 6, 'x');
+   gameBoard.addWall(8, 24, 26, 'x');
+   gameBoard.addWall(6, 20, 3, 'x');
+   gameBoard.addWall(9, 20, 4, 'y');
+   gameBoard.addWall(5, 23, 1, 'y');
+   
+   gameBoard.addPool(2, 13);
+   
+   playerPos[0] = 2;
+   playerPos[1] = 27;
+   
+   gameBoard.addTarget(25, 50, 100);
+  break;
+  }
+  case 8:
+  {
+   gameBoard.addWall(10, 9, 36, 'x');
+   gameBoard.addWall(10, 21, 36, 'x');
+   gameBoard.addWall(10, 10, 11, 'y');
+   gameBoard.addWall(37, 14, 3, 'y');
+   gameBoard.addWall(38, 14, 3, 'y');
+   gameBoard.addWall(39, 14, 3, 'y');
+   gameBoard.addWall(40, 14, 3, 'y');
+   gameBoard.addWall(41, 14, 3, 'y');
+   gameBoard.addWall(42, 14, 3, 'y');
+   gameBoard.addWall(45, 10, 11, 'y'); 
+   
+   gameBoard.addWall(22, 10, 5, 'y');
+   gameBoard.addWall(22, 16, 5, 'y');
+   gameBoard.addWall(23, 10, 4, 'y');
+   gameBoard.addWall(23, 16, 5, 'y');
+   gameBoard.addWall(24, 10, 4, 'y');
+   gameBoard.addWall(24, 16, 5, 'y');
+   gameBoard.addWall(25, 10, 5, 'y');
+   gameBoard.addWall(25, 16, 5, 'y');
+   
+   gameBoard.addLife(23, 14);
+   gameBoard.addLife(24, 14);
+   gameBoard.addLife(23, 15);
+   gameBoard.addLife(24, 15);
+   
+   gameBoard.addBioTurret(12, 15);
+   gameBoard.addBioTurret(35, 15);
+   playerPos[0] = 12;
+   playerPos[1] = 11;
+   
+   gameBoard.addPool(43, 15);
+   
+   gameBoard.addTarget(25, 50, 100);
+   
+  break;
+  }
+  case 9:
+  {
+   playerPos[0] = 1;
+   playerPos[1] = 1;
+   gameBoard.addWall(6, 0, 10, 'y');
+   gameBoard.addWall(14, 0, 14, 'y');
+   gameBoard.addWall(3, 10, 4, 'y'); 
+   gameBoard.addWall(0, 9, 4, 'x');
+   gameBoard.addWall(3, 14, 12, 'x');
+   gameBoard.addWall(7, 9, 5, 'x');
+   gameBoard.addLife(3, 6);
+   gameBoard.addLife(4, 6);
+   gameBoard.addLife(5, 6);
+   gameBoard.addPool(10, 2);
+   
+   gameBoard.addTarget(25, 50, 100);
+   
+  break;
+  }  
+ }
+ 
+ gameBoard.addPlayer();
+ gameBoard.draw();
+ Menu();
+ 
+ LoopRun = setInterval(gameLoop, 250);
+}
+
+function victoryScreen()
+{
+ clearInterval(LoopRun);
+ clearScreen();
+ 
+ ctx.font = "30px Trebuchet MS";
+ ctx.fillStyle = "black";
+ 
+ ctx.fillText("Congratulations! You saved the Blips!", 50, 150);
+ ctx.fillText("Click to return to level select...", 100, 360);
+ 
+}
+
+function Instructions()
+{
+ clearScreen();
+ instructOn = true;
+ 
+ ctx.font = "30px Trebuchet MS";
+ ctx.fillStyle = "black";
+ 
+ ctx.fillText("Instructions", 280, 50);
+ 
+ for(var i = 0; i < 3; i ++)
+ {
+ 
+  ctx.beginPath();
+  ctx.lineWidth = "3";
+  ctx.rect(i*240, 450, 240, 60);
+  ctx.stroke(); 
+ }
+ 
+ 
+ ctx.fillText("Main Menu", 285, 490);
+ 
+ ctx.font = "72px Trebuchet MS";
+ 
+   if(pageNo != 0)
+ {
+  ctx.fillText("<", 90, 502);
+ }
+ 
+ if(pageNo != 1)
+ { 
+  ctx.fillText(">", 580, 502);
+ } 
+ 
+ ctx.font = "bold italic 20px Trebuchet MS";
+ 
+ 
+ 
+ switch(pageNo)
+ {
+  case 0:
+  {
+   ctx.fillText("Objective", 60, 100);
+   ctx.fillText("Conway the Shepherd", 60, 180);
+   ctx.fillText("The Blips", 60, 280);
+   ctx.fillText("Walls", 60, 400);
+   
+   ctx.font = "16px Trebuchet MS";
+   
+   ctx.fillText("The goal of Blip Shepherd is to get as many Blips as you can to the pool!", 60, 125);
+   
+   ctx.fillText("You play as Conway!", 60, 205); 
+   ctx.fillText("Herd the Blips by moving near them, using the WASD controls to move.", 60, 225);
+   
+   ctx.fillText("Unusual litte creatures, their population evolves somewhat eratically", 60, 305);
+   ctx.fillText("depending on how many of their fellow Blips they are near.", 60, 325);
+   ctx.fillText("Get as many of these guys as you can to the pool to win each level!", 60, 345);
+   
+   ctx.fillText("These are walls...they get in the way of stuff!", 60, 425);
+   
+   ctx.beginPath();
+   ctx.lineWidth = "0.75";
+   ctx.strokeStyle = "black";
+   ctx.rect(300, 165, 15, 15);
+   ctx.fillStyle = "green";
+   ctx.fillRect(300, 165, 15, 15);
+   ctx.stroke();
+   
+   ctx.beginPath();
+   ctx.lineWidth = "0.75";
+   ctx.strokeStyle = "black";
+   ctx.rect(300, 265, 15, 15);
+   ctx.fillStyle = "yellow";
+   ctx.fillRect(300, 265, 15, 15);
+   ctx.stroke();
+   
+   ctx.beginPath();
+   ctx.lineWidth = "0.75";
+   ctx.strokeStyle = "black";
+   ctx.rect(300, 385, 15, 15);
+   ctx.fillStyle = "black";
+   ctx.fillRect(300, 385, 15, 15);
+   ctx.stroke();
+   
+  break;
+  }
+  
+  case 1:
+  {
+   ctx.fillText("The Pool", 60, 100);
+   ctx.fillText("Turrets", 60, 230);
+   ctx.fillText("Bio Turrets", 60, 310);
+   
+   ctx.font = "16px Trebuchet MS";
+   
+   ctx.fillText("The Pool teleports Blips away to safety!", 60, 125);
+   ctx.fillText("Far away from whatever hellish land they", 60, 145);
+   ctx.fillText("find themselves in!", 60, 165);
+   
+   ctx.fillText("These nasty chaps shoot red bullets at your Blips to try to kill them! The rotters!", 60, 255);
+   
+   ctx.fillText("BIOLOGICAL WARFARE!!! OMG!!! These turrets fire Pseudo Blips at your herd to disrupt", 60, 335);
+   ctx.fillText("their population evolution!", 60, 355);
+   
+   ctx.fillText("...oh and press P to pause!", 500, 440);
+   
+   for(var i = 0; i < 3; i ++)
+   {
+    for(var j = 0; j < 3; j ++)
+    {
+     if(i != 1 || j != 1)
+     {
+      ctx.beginPath();
+      ctx.lineWidth = "0.75";
+      ctx.strokeStyle = "black";
+      ctx.rect(375+i*15, 115+j*15, 15, 15);
+      ctx.fillStyle = "blue";
+      ctx.fillRect(375+i*15, 115+j*15, 15, 15);
+      ctx.stroke();
+     }
+    }
+   }
+   
+   ctx.beginPath();
+   ctx.lineWidth = "0.75";
+   ctx.strokeStyle = "black";
+   ctx.rect(300, 215, 15, 15);
+   ctx.fillStyle = "brown";
+   ctx.fillRect(300, 215, 15, 15);
+   ctx.stroke();
+   
+   ctx.beginPath();
+   ctx.lineWidth = "0.75";
+   ctx.strokeStyle = "black";
+   ctx.rect(315, 215, 15, 15);
+   ctx.fillStyle = "red";
+   ctx.fillRect(315, 215, 15, 15);
+   ctx.stroke();
+   
+   ctx.beginPath();
+   ctx.lineWidth = "0.75";
+   ctx.strokeStyle = "black";
+   ctx.rect(300, 295, 15, 15);
+   ctx.fillStyle = "mediumvoiletred";
+   ctx.fillRect(300, 295, 15, 15);
+   ctx.stroke();
+   
+   ctx.beginPath();
+   ctx.lineWidth = "0.75";
+   ctx.strokeStyle = "black";
+   ctx.rect(315, 295, 15, 15);
+   ctx.fillStyle = "purple";
+   ctx.fillRect(315, 295, 15, 15);
+   ctx.stroke();
+   
+   
+  break;
+  }
+ }
+}
+
+var LoopRun;
+
+var TitleScreen = false;
+var LevelSel = false;
+var gameOn = false;
+var VictoryOn = false;
+var instructOn = false;
+var finishOn = false;
+var Go = false;
+
+var pageNo = 0;
+var level = 0;
+
+
+var trophy = 'n';
+var trophies = new Array(9);
+
+var totalPoints = 0;
+
+for(var i = 0; i < 9; i ++)
+{
+ trophies[i] = 'n';
+}
+
+var unlockThresh = [ 0, 1, 2, 9, 12, 15, 30, 35, 40 ];
+
+var gameBoard = new grid(48, 30);
+var playerPos = new Array(2);
+var safe = 0;
+
+if(localStorage.getItem("trophies")=== null)
+{
+ localStorage.setItem("trophies", JSON.stringify(trophies));
+ /*var test = localStorage.getItem("trophies");
+ console.log(test);*/
+}
+
+titleScreen();
+
+
+
+</script>
+
+
+<body>
+
+<br><br>
+<a href="http://goo.gl/GMnYxV">Play Director's Cut.</a>
+
+</body>
+
