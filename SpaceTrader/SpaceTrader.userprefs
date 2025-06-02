@@ -1,0 +1,14 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.Workbench ActiveDocument="..\FabricHD\Assets\Scripts\Control.cs">
+    <Files>
+      <File FileName="..\FabricHD\Assets\Scripts\TimeControl.cs" Line="71" Column="27" />
+      <File FileName="..\FabricHD\Assets\Scripts\CameraControl.cs" Line="32" Column="2" />
+      <File FileName="..\FabricHD\Assets\Scripts\Control.cs" Line="200" Column="22" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

@@ -1,0 +1,41 @@
+Thanks for downloading Night of the Fireflies!
+
+Apologies for the hastily thrown together standalone version, this game was designed to be run using Unity Web Player but as 
+Google Chrome no longer supports it I felt I should offer an alternative.
+
+Controls:	  
+
+Navigate menus with the mouse.
+
+== Campaign Mode == 
+Mouse navigates UI
+
+Left click to transfer commodities in small increments.
+Right click to transfer maximum amount of commodities.
+
+Can specify quantities in text fields as well.
+
+Esc/Start to bring up Save or Quit menu.
+
+== Drop Ship == 
+
+A/D or Left/Right or Left Stick -> Steer Anti-Clockwise/Clockwise
+Enter/A Button                  -> Release Drop Ship From Mother Ship
+Space Bar/Right Trigger         -> Thrusters
+
+== Mother Ship ==
+
+Shield Controls:
+Mouse Position or Left Stick Position controls shield rotation
+Mouse Wheel Up/Down turns shields On/Off 	[Resting the left stick turns off shield with gamepad controls]
+
+Gun Controls:
+A/D or Left/Right or Right Stick -> Aim Anti-Clockwise/Clockwise
+Right Trigger/Space Bar          -> Shoot
+
+
+Gamepad controls are for Xbox 360 controllers running on Windows as I can't test anything else!
+
+Thank you for checking out my game, feel free to get in touch on Twitter @Hacksaw79 or email jhaxgame@gmail.com
+
+(c) Josh Haxell 2015

@@ -1,0 +1,268 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+ <head>
+  
+  <title>Unity Web Player | Traverse</title>
+  <script src="https://ssl-webplayer.unity3d.com/download_webplayer-3.x/3.0/uo/jquery.min.js" type="text/javascript"></script>
+  <script type="text/javascript">
+  <!--
+  var unityObjectUrl = "http://webplayer.unity3d.com/download_webplayer-3.x/3.0/uo/UnityObject2.js";
+  if (document.location.protocol == 'https:')
+   unityObjectUrl = unityObjectUrl.replace("http://", "https://ssl-");
+  document.write('<script type="text\/javascript" src="' + unityObjectUrl + '"><\/script>');
+  -->
+  </script>
+  <script type="text/javascript">
+  <!--
+   var config = {
+    width: 960, 
+    height: 600,
+    params: { enableDebugging:"0" }
+    
+   };
+   config.params["disableContextMenu"] = true;
+   var u = new UnityObject2(config);
+   
+   jQuery(function() {
+
+    var $missingScreen = jQuery("#unityPlayer").find(".missing");
+    var $brokenScreen = jQuery("#unityPlayer").find(".broken");
+    $missingScreen.hide();
+    $brokenScreen.hide();
+
+    u.observeProgress(function (progress) {
+     switch(progress.pluginStatus) {
+      case "broken":
+       $brokenScreen.find("a").click(function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        u.installPlugin();
+        return false;
+       });
+       $brokenScreen.show();
+      break;
+      case "missing":
+       $missingScreen.find("a").click(function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        u.installPlugin();
+        return false;
+       });
+       $missingScreen.show();
+      break;
+      case "installed":
+       $missingScreen.remove();
+      break;
+      case "first":
+      break;
+     }
+    });
+
+                                //GAME GOES HERE
+
+    u.initPlugin(jQuery("#unityPlayer")[0], "https://dl.dropboxusercontent.com/u/254621982/Traverse_Webplayer_1_0_1.unity3d");
+   });
+  -->
+  </script>
+  <style type="text/css">
+  <!--
+  body {
+   font-family: Helvetica, Verdana, Arial, sans-serif;
+   background-color: white;
+   color: black;
+   text-align: center;
+  }
+  a:link, a:visited {
+   color: #000;
+  }
+  a:active, a:hover {
+   color: #666;
+  }
+  p.header {
+   font-size: small;
+  }
+  p.header span {
+   font-weight: bold;
+  }
+  p.footer {
+   font-size: x-small;
+  }
+  div.content {
+   margin: auto;
+   width: 960px;
+  }
+  div.broken,
+  div.missing {
+   margin: auto;
+   position: relative;
+   top: 50%;
+   width: 193px;
+  }
+  div.broken a,
+  div.missing a {
+   height: 63px;
+   position: relative;
+   top: -31px;
+  }
+  div.broken img,
+  div.missing img {
+   border-width: 0px;
+  }
+  div.broken {
+   display: none;
+  }
+  div#unityPlayer {
+   cursor: default;
+   height: 600px;
+   width: 960px;
+  }
+  -->
+  </style>
+ </head>
+ <body>
+  <div class="header">
+<span>Unity Web Player | </span>Traverse</div>
+<div class="content">
+   <div id="unityPlayer">
+    <div class="missing">
+     <a href="http://unity3d.com/webplayer/" title="Unity Web Player. Install now!">
+      <img alt="Unity Web Player. Install now!" height="63" src="http://webplayer.unity3d.com/installation/getunity.png" width="193" />
+     </a>
+    </div>
+</div>
+</div>
+<div class="footer">
+« created with <a href="http://unity3d.com/unity/" title="Go to unity3d.com">Unity</a> »</div>
+</body>
+</html>
+
+
+<html>
+<header><b>
+
+Controls
+
+</b></header>
+<br><br>
+
+
+<style>
+
+HEAD 
+{	
+	text-align: center;
+}
+
+BODY
+{
+	text-align: left;
+}
+
+</style>
+
+<body>
+
+<HEAD>CAMPAIGN MODE</HEAD><br><br>
+
+<BODY>
+
+	Navigate menus with the mouse. When transferring goods between ships or hangars, left click to
+	transfer a small amount or right click to transfer the maximum possible amount. <br><br>
+	In the market it is possible to edit the text fields for quantity rather than using the buttons. <br><br>
+	ESC/Start to bring up Save/Quit Menu <br><br>
+
+</BODY>
+
+	
+	
+	<b>Gamepad inputs for XBox 360 controller for Windows</b>
+
+	<br><br>
+
+</body>
+
+
+
+
+<table cellspacing = "300">
+	
+	<tr>
+	
+		<th>Input</th>
+		<th>Drop Ship</th>
+		<th>Mother Ship</th>
+		
+	<tr>
+	
+	<tr>
+		<td>Mouse Movement</td>
+		
+		<td>N/A</td>
+		<td>Shield Position</td>
+		
+	
+	</tr>
+	
+	<tr>
+		<td>Mouse Wheel Scroll Up/Down</td>
+		<td>N/A</td>
+		<td>Shield On/Off</td>
+		
+	</tr>
+	
+	<tr>
+		<td>A/D Keys or Left/Right Arrow Keys</td>
+		<td>Steer Anti-clockwise/Clockwise</td>
+		<td>Aim Anti-clockwise/Clockwise</td>
+	</tr>
+	
+	<tr>
+		
+		<td>Enter/A Button</td>
+		
+		<td>Release Drop Ship</td>
+		<td>N/A</td>
+		
+	</tr>
+	
+	<tr>
+		<td>Space Bar/Right Trigger</td>
+		
+		<td>Thrusters</td>
+		<td>Shoot</td>
+		
+	</tr>
+	
+	<tr>
+		<td>Left Stick</td>
+		
+		<td>Steer</td>
+		<td>Shield On/Position</td>
+	
+	</tr>
+	
+	<tr>
+	
+		<td>Right Stick</td>
+				
+		<td>N/A</tr>
+		<td>Aim</td>
+		
+		
+	</tr>
+	
+		
+
+</table>
+
+
+
+
+
+
+</html>
+
+
+
+
+
+
