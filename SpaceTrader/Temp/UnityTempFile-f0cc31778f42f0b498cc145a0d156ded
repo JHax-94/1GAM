@@ -1,0 +1,137 @@
+-debug
+-target:library
+-nowarn:0169
+-langversion:4
+-out:Temp/Assembly-CSharp.dll
+-unsafe
+-r:"C:/Program Files/Unity/Hub/Editor/5.6.7f1/Editor/Data/Managed/UnityEngine.dll"
+-r:Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll
+-r:"C:/Program Files/Unity/Hub/Editor/5.6.7f1/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/5.6.7f1/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/5.6.7f1/Editor/Data/UnityExtensions/Unity/TestRunner/UnityEngine.TestRunner.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/5.6.7f1/Editor/Data/UnityExtensions/Unity/TestRunner/net35/unity-custom/nunit.framework.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/5.6.7f1/Editor/Data/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/5.6.7f1/Editor/Data/UnityExtensions/Unity/UnityHoloLens/RuntimeEditor/UnityEngine.HoloLens.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/5.6.7f1/Editor/Data/UnityExtensions/Unity/UnityVR/RuntimeEditor/UnityEngine.VR.dll"
+-r:"C:/Program Files/Unity/Hub/Editor/5.6.7f1/Editor/Data/Managed/UnityEditor.dll"
+-define:UNITY_5_3_OR_NEWER
+-define:UNITY_5_4_OR_NEWER
+-define:UNITY_5_5_OR_NEWER
+-define:UNITY_5_6_OR_NEWER
+-define:UNITY_5_6_7
+-define:UNITY_5_6
+-define:UNITY_5
+-define:ENABLE_AUDIO
+-define:ENABLE_CACHING
+-define:ENABLE_CLOTH
+-define:ENABLE_DUCK_TYPING
+-define:ENABLE_GENERICS
+-define:ENABLE_PVR_GI
+-define:ENABLE_MICROPHONE
+-define:ENABLE_MULTIPLE_DISPLAYS
+-define:ENABLE_PHYSICS
+-define:ENABLE_RUNTIME_NAVMESH_BUILDING
+-define:ENABLE_SPRITERENDERER_FLIPPING
+-define:ENABLE_SPRITES
+-define:ENABLE_TERRAIN
+-define:ENABLE_RAKNET
+-define:ENABLE_UNET
+-define:ENABLE_LZMA
+-define:ENABLE_UNITYEVENTS
+-define:ENABLE_WEBCAM
+-define:ENABLE_WWW
+-define:ENABLE_CLOUD_SERVICES_COLLAB
+-define:ENABLE_CLOUD_SERVICES_ADS
+-define:ENABLE_CLOUD_HUB
+-define:ENABLE_CLOUD_PROJECT_ID
+-define:ENABLE_CLOUD_SERVICES_UNET
+-define:ENABLE_CLOUD_SERVICES_BUILD
+-define:ENABLE_CLOUD_LICENSE
+-define:ENABLE_EDITOR_METRICS
+-define:ENABLE_EDITOR_METRICS_CACHING
+-define:ENABLE_NATIVE_ARRAY
+-define:INCLUDE_DYNAMIC_GI
+-define:INCLUDE_GI
+-define:PLATFORM_SUPPORTS_MONO
+-define:RENDER_SOFTWARE_CURSOR
+-define:INCLUDE_PUBNUB
+-define:ENABLE_PLAYMODE_TESTS_RUNNER
+-define:ENABLE_SCRIPTING_NEW_CSHARP_COMPILER
+-define:ENABLE_VIDEO
+-define:UNITY_STANDALONE_WIN
+-define:UNITY_STANDALONE
+-define:ENABLE_SUBSTANCE
+-define:ENABLE_RUNTIME_GI
+-define:ENABLE_MOVIES
+-define:ENABLE_NETWORK
+-define:ENABLE_CRUNCH_TEXTURE_COMPRESSION
+-define:ENABLE_UNITYWEBREQUEST
+-define:ENABLE_CLOUD_SERVICES
+-define:ENABLE_CLOUD_SERVICES_ANALYTICS
+-define:ENABLE_CLOUD_SERVICES_PURCHASING
+-define:ENABLE_CLOUD_SERVICES_CRASH_REPORTING
+-define:ENABLE_EVENT_QUEUE
+-define:ENABLE_CLUSTERINPUT
+-define:ENABLE_VR
+-define:ENABLE_WEBSOCKET_HOST
+-define:ENABLE_MONO
+-define:NET_2_0_SUBSET
+-define:ENABLE_PROFILER
+-define:DEBUG
+-define:TRACE
+-define:UNITY_ASSERTIONS
+-define:UNITY_EDITOR
+-define:UNITY_EDITOR_64
+-define:UNITY_EDITOR_WIN
+-define:ENABLE_NATIVE_ARRAY_CHECKS
+Assets/AsteroidCollisions.cs
+Assets/AsteroidModeControl.cs
+Assets/AsteroidsGUI.cs
+Assets/DropModeControl.cs
+Assets/Exploderation.cs
+Assets/GameOverScreen.cs
+Assets/MotherShipCollision.cs
+Assets/PirateModeControl.cs
+Assets/Scripts/Asteroids/Portalling.cs
+Assets/Scripts/Asteroids/asteroidDirector.cs
+Assets/Scripts/Asteroids/verticalPortal.cs
+Assets/Scripts/Asteroids/wallKick.cs
+Assets/Scripts/Campaign/CampaignGUI.cs
+Assets/Scripts/Campaign/Planet.cs
+Assets/Scripts/Campaign/TradeRoute.cs
+Assets/Scripts/Campaign/galacticConstants.cs
+Assets/Scripts/DropShip/AlphaOmega.cs
+Assets/Scripts/DropShip/cameraDrop.cs
+Assets/Scripts/DropShip/clawControl.cs
+Assets/Scripts/DropShip/dropIntro.cs
+Assets/Scripts/DropShip/dropShipControls.cs
+Assets/Scripts/DropShip/windEffect.cs
+Assets/Scripts/Menu/Credits.cs
+Assets/Scripts/Menu/GameSettings.cs
+Assets/Scripts/Menu/MenuStyle.cs
+Assets/Scripts/Menu/NewGameOptions.cs
+Assets/Scripts/Menu/QuickAsteroidsOptions.cs
+Assets/Scripts/Menu/QuickDropOptions.cs
+Assets/Scripts/Menu/QuickFightOptions.cs
+Assets/Scripts/Menu/menuGUI.cs
+Assets/Scripts/PirateAttack/ActivationControl.cs
+Assets/Scripts/PirateAttack/DirectorAI.cs
+Assets/Scripts/PirateAttack/pirateGuns.cs
+Assets/Scripts/PirateAttack/pirateShip.cs
+Assets/Scripts/PirateAttack/spawnDelay.cs
+Assets/Scripts/bringToFront.cs
+Assets/Scripts/bufferOverride.cs
+Assets/Scripts/motherShip/ArmatureFunctions.cs
+Assets/Scripts/motherShip/bulletTime.cs
+Assets/Scripts/motherShip/gunControls.cs
+Assets/Scripts/motherShip/motherShip.cs
+Assets/Scripts/motherShip/shieldControls.cs
+Assets/TradeRouteDirectory.cs
+Assets/Upgrade.cs
+Assets/systemsList.cs
+-r:"C:\Program Files\Unity\Hub\Editor\5.6.7f1\Editor\Data\Mono\lib\mono\unity\System.Runtime.Serialization.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\5.6.7f1\Editor\Data\Mono\lib\mono\unity\System.Xml.Linq.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\5.6.7f1\Editor\Data\Mono\lib\mono\unity\UnityScript.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\5.6.7f1\Editor\Data\Mono\lib\mono\unity\UnityScript.Lang.dll"
+-r:"C:\Program Files\Unity\Hub\Editor\5.6.7f1\Editor\Data\Mono\lib\mono\unity\Boo.Lang.dll"
+-sdk:unity

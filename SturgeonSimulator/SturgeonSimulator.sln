@@ -1,9 +1,7 @@
+﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2008
-
-Project("{EB3B245C-808C-23F4-2B2F-0B942266C883}") = "SturgeonSimulator", "Assembly-CSharp.csproj", "{3EB752A5-AD12-C010-FE35-6596382C0E89}"
-EndProject
-Project("{EB3B245C-808C-23F4-2B2F-0B942266C883}") = "SturgeonSimulator", "Assembly-UnityScript-firstpass.unityproj", "{9C2D8D71-4BBE-5437-FB20-A78DD5D70BFF}"
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SturgeonSimulator", "Assembly-CSharp.csproj", "{3EB752A5-AD12-C010-FE35-6596382C0E89}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,10 +13,6 @@ Global
 		{3EB752A5-AD12-C010-FE35-6596382C0E89}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3EB752A5-AD12-C010-FE35-6596382C0E89}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3EB752A5-AD12-C010-FE35-6596382C0E89}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9C2D8D71-4BBE-5437-FB20-A78DD5D70BFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9C2D8D71-4BBE-5437-FB20-A78DD5D70BFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9C2D8D71-4BBE-5437-FB20-A78DD5D70BFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9C2D8D71-4BBE-5437-FB20-A78DD5D70BFF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -41,5 +35,4 @@ Global
 		$3.inheritsScope = text/plain
 		$3.scope = text/plain
 	EndGlobalSection
-
 EndGlobal
